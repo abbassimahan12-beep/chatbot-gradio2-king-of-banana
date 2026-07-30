@@ -39,10 +39,18 @@ def save_conversation(session_id: str, history: list):
     _write_all(all_history)
 
 def delete_conversation(session_id: str):
-    ...
+    all_history = load_all()
+    all_history.pop(str(session_id), None)
+    _write_all(all_history)
 
 def get_sidebar_choice():
-    ...
+    all_history = load_all()
+    sort_items = sorted(
+        all_history.items(),
+        key=lambda x: x[1].get("updated_at", ""),
+        reverse=True
+    )
+    return[(v.get("title", sid), sid) for sid, v in sort_items]
 
 def get_messages(session_id: str) -> list:
-    ...
+    return load_all.get(str(session_id), {}).get("messages", [])
